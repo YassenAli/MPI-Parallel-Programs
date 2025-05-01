@@ -93,5 +93,5 @@ int main(int argc, char** argv) {
 }
 
 
-// Compile with: mpicc -o primes_send_recv primes_send_recv.c -lm
+// Compile with: mpicc primes_send_recv.c -o primes_send_recv -lm
 // Run with: mpirun -np <number_of_processes> ./primes_send_recv

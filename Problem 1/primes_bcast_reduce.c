@@ -77,5 +77,5 @@ int main(int argc, char** argv) {
 }
 
 
-// Compile with: mpicc -o primes_bcast_reduce primes_bcast_reduce.c -lm
+// Compile with: mpicc primes_bcast_reduce.c -o primes_bcast_reduce -lm
 // Run with: mpirun -np <number_of_processes> ./primes_bcast_reduce

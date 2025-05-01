@@ -87,3 +87,7 @@ int main(int argc, char** argv){
     MPI_Finalize();
     return 0;
 }
+
+
+// Compile with: mpicc matrix_sum_scatter_gather.c -o matrix_sum_scatter_gather
+// Run with: mpirun -np <number_of_processes> ./matrix_sum_scatter_gather
