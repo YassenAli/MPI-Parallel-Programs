@@ -14,7 +14,7 @@ bool isPrime(int num) {
         }
     }
 
-    return true;  
+    return true;
 }
 
 int main(int argc, char** argv) {
@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
     int x, y, r;
     MPI_Init(&argc, &argv);
 
+    double start_time, end_time , exec_time ;
     // Get the number of processes
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
@@ -46,6 +47,10 @@ int main(int argc, char** argv) {
             MPI_Finalize();
             return 0;
          }
+
+        //  MPI_Barrier(MPI_COMM_WORLD);
+         start_time = MPI_Wtime();
+
          int numbersCount = y-x;
          r = numbersCount/(world_size-1);
          int number = x;
@@ -66,11 +71,16 @@ int main(int argc, char** argv) {
             MPI_Recv(&temp, 1, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             counter += temp;
          }
+            end_time = MPI_Wtime();
+            exec_time = end_time - start_time ;
             printf("Total prime numbers between %d and %d are: %d\n", x, y, counter);
+            fflush(stdout);
+            printf("Execution time: %.6f seconds\n", exec_time);
             fflush(stdout);
 
         } else {
             int x,y, counter;
+            counter = 0;
 
             MPI_Recv(&x,1,MPI_INT,0,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
             MPI_Recv(&y,1,MPI_INT,0,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
@@ -83,9 +93,11 @@ int main(int argc, char** argv) {
 
             MPI_Send(&counter, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
             printf("Process %d found %d prime numbers between %d and %d\n", world_rank, counter, x, y);
+            fflush(stdout);
         }
     }else{
         printf("rerun with more than one process");
+        fflush(stdout);
     }
 
     

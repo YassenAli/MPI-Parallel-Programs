@@ -22,6 +22,8 @@ int main(int argc, char** argv) {
     int x, y, r;
     MPI_Init(&argc, &argv);
 
+    double start_time , end_time , exec_time ; 
+
     // Get the number of processes
     int world_size;
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
@@ -48,10 +50,14 @@ int main(int argc, char** argv) {
          }
          int numbersCount = y-x;
          r = numbersCount/(world_size-1);
+
         }
         MPI_Bcast(&x, 1, MPI_INT, 0, MPI_COMM_WORLD);
         MPI_Bcast(&y, 1, MPI_INT, 0, MPI_COMM_WORLD);
         MPI_Bcast(&r, 1, MPI_INT, 0, MPI_COMM_WORLD);
+
+        start_time = MPI_Wtime();
+
         int start = x + (world_rank - 1) * r;
         int end = start + r-1;
         if(world_rank == world_size - 1){
@@ -65,8 +71,13 @@ int main(int argc, char** argv) {
         }
         int result =0;
         MPI_Reduce(&counter, &result, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+        
+        end_time = MPI_Wtime();
+
         if(world_rank == 0){
             printf("The number of prime numbers between %d and %d is: %d\n", x, y, result);
+            exec_time = end_time - start_time ;
+            printf("Time taken: %f seconds\n", exec_time);
         }
     }else{
         printf("rerun with more than one process");
